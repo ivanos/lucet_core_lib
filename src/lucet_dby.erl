@@ -13,17 +13,15 @@
 
 % getters
 
--spec get_cen(binary()) -> #{cenID => string(), contIds => [string()]}.
+-spec get_cen(string()) -> #{}.
 get_cen(CenId) ->
     ContIds = dby:search(fun linked_containers/4, [], CenId, [{max_depth, 1}]),
-    #{cenID => binary_to_list(CenId), contIDs => ContIds}.
+    #{"cenID" => CenId, "contIDs" => ContIds}.
 
--spec get_cont(binary()) -> #{contID => string(),
-                              cens => [#{cenID => string(),
-                                         peerId => string()} | unassigned]}.
+-spec get_cont(binary()) -> #{}.
 get_cont(ContId) ->
     CenInfo = dby:search(fun linked_cens/4, [], ContId, [{max_depth, 1}]),
-    #{contID => ContId, cens => CenInfo}.
+    #{"contID" => ContId, "cens" => CenInfo}.
 
 % publishers
 
@@ -63,5 +61,5 @@ linked_cens(Cen, ?MATCH_CEN, [{_, _, LinkMetadata} | _], Acc) ->
 linked_cens(_, _, _, Acc) ->
     {continue, Acc}.
 
-peerId(#{<<"peer">> := #{value := Peer}}) -> binary_to_list(Peer);
+peerId(#{<<"peerId">> := #{value := Peer}}) -> binary_to_list(Peer);
 peerId(_) -> unassigned.
