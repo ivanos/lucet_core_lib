@@ -1,6 +1,8 @@
 -module(lucet_dby).
 
+-ifndef(TEST).
 -on_load(install_iso8601/0).
+-endif.
 
 -export([get_cen/1,
          get_cont/1]).
